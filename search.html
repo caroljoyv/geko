@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Companies</title>
+  
+  <style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: url(images/plasticbottlewallpaper.jpg);
+    
+}
+
+        .container {
+          width: 800px;
+          height: 800px;
+          margin: 8% auto;
+          padding: 20px;
+          
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    
+        h1 {
+          font-size: 32px;
+          margin: 0;
+          text-align: center;          
+        }
+    
+        .search-box {
+          margin-top: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+    
+        .search-box input[type="text"] {
+          width: 80%;
+          padding: 10px;
+          font-size: 16px;
+          border: 1px solid #ddd;
+          border-radius: 20px;
+          outline: none;
+        }
+    
+        .search-box button[type="submit"] {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          font-size: 20px;
+          color: #666;
+        }
+    
+        .companies {
+          margin-top: 50px;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-gap: 20px;
+        }
+    
+        .company {
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    
+        .company h2 {
+          font-size: 20px;
+          margin: 0;
+          margin-bottom: 10px;
+        }
+    
+        .company p {
+          font-size: 16px;
+          margin: 0;
+        }
+  </style>
+</head>
+<body>
+    <h1>Company Waste Filter</h1>
+    
+        <form class="search-box">
+          <input type="text" id="search" name="search" placeholder="Search for companies by waste type...">
+          <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+  <div id="companies-container" class="companies"></div>
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+  // Variables
+  const companiesContainer = document.getElementById('companies-container');
+  const searchForm = document.querySelector('.search-box');
+  const searchInput = document.getElementById('search');
+
+  // Fetch data from the JSON file
+  fetch('company_raw_material_dataset_new2.json')
+    .then(response => response.json())
+    .then(data => {
+      // Initial display of all companies
+      displayCompanies(data);
+
+      // Add event listener for search form submission
+      searchForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const searchTerm = searchInput.value.toLowerCase();
+
+        // Filter companies based on the search term
+        const filteredCompanies = data.filter(company =>
+          company['Raw Materials Used'].some(material =>
+            material.toLowerCase().includes(searchTerm)
+          )
+        );
+
+        // Display the filtered companies
+        displayCompanies(filteredCompanies);
+      });
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+  // Function to display companies
+  function displayCompanies(companies) {
+    // Clear the existing content
+    companiesContainer.innerHTML = '';
+
+    // Display each company
+    companies.forEach(company => {
+      const companyElement = document.createElement('div');
+      companyElement.classList.add('company');
+      companyElement.dataset.wasteType = company['Raw Materials Used'][0].toLowerCase(); // Assuming the first material as waste type
+
+      const h2 = document.createElement('h2');
+      h2.textContent = company['Company Name'];
+
+      const p = document.createElement('p');
+      p.textContent = `${company['Raw Materials Used'].join(', ')} as raw materials.`;
+
+      companyElement.appendChild(h2);
+      companyElement.appendChild(p);
+
+      companiesContainer.appendChild(companyElement);
+    });
+  }
+});
+
+  </script>
+</body>
+</html>
