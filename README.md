@@ -49,6 +49,6 @@ For any questions, feedback, or support, reach out to the Mugiwara Kaizoku team:
 
 - Carolene Joy - [Email](mailto:caroljoyv27@gmail.com)
 - Jeffrey Shijo - [Email](mailto:jeffreysjs12@gmail.com)
-- Alna Benny - [Email](mailto:alna.benny@example.com)
+- Alna Benny - [Email](mailto:alnabenny03@gmail.com)
 
 Thank you for your interest in Geko! Happy hacking!
